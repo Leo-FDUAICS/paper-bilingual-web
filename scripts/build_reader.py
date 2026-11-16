@@ -15,7 +15,7 @@ from PIL import Image, ImageChops
 
 SKILL_DIR = Path(__file__).resolve().parents[1]
 KINDS = {'title', 'authors', 'heading', 'paragraph', 'abstract', 'continuation',
-         'footnote', 'bullet', 'step', 'step-body', 'figure', 'table', 'equation'}
+         'footnote', 'bullet', 'step', 'step-body', 'figure', 'table', 'equation', 'references'}
 TAGS = {'p', 'b', 'strong', 'em', 'i', 'sup', 'sub', 'var', 'br', 'span', 'div', 'code'}
 
 
@@ -71,7 +71,7 @@ def validate(document, pdf):
         kind = row.get('kind')
         if kind not in KINDS:
             raise ValueError(f'{key}: unknown kind {kind!r}.')
-        if kind != 'equation':
+        if kind not in ('equation', 'references'):
             value = row.get('zh')
             if not isinstance(value, str) or not value.strip():
                 raise ValueError(f'{key}: the Chinese translation is missing.')
@@ -156,9 +156,11 @@ def compose(document, rows, assets):
     parts = [
         '<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">',
         '<meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" href="data:,">',
+        '<script src="theme.js"></script>',
         '<meta name="description" content="论文原文与中文译文逐段对照，保留原始公式和图表。">',
         '<title>' + escape(name) + ' — 原文与中文对照</title>',
         '<link rel="stylesheet" href="reader.css">',
+        '<link rel="stylesheet" href="theme.css">',
         '<script src="reader.js" defer></script>',
     ]
     parts.append('</head><body' + (' class="has-section-rail"' if chapters else '') + '>')
@@ -194,6 +196,8 @@ def compose(document, rows, assets):
             for asset in assets[row['id']]:
                 alt = f'公式（{row.get("number", "")}）：{row.get("label", asset["alt"])}'
                 parts.append(image_tag(asset, alt))
+        elif kind == 'references':
+            pass
         elif kind == 'title':
             parts.append('<h1>' + row['zh'] + '</h1>')
         elif kind == 'heading':
@@ -203,7 +207,9 @@ def compose(document, rows, assets):
         else:
             parts.append('<p>' + row['zh'] + '</p>')
         parts.append('</div></div></section>')
-    parts.append('</main></body></html>')
+    parts.append('</main>')
+    parts.append((SKILL_DIR / 'assets' / 'theme-toggle.html').read_text(encoding='utf-8'))
+    parts.append('</body></html>')
     return '\n'.join(parts)
 
 
@@ -218,7 +224,7 @@ def build(pdf_path, blocks_path, output, scale=4):
         rows = validate(document, pdf)
         (output / 'assets').mkdir(parents=True, exist_ok=True)
         assets = render_sources(pdf, rows, output, scale)
-    for name in ('reader.css', 'reader.js'):
+    for name in ('reader.css', 'reader.js', 'theme.css', 'theme.js'):
         shutil.copyfile(SKILL_DIR / 'assets' / name, output / name)
     (output / 'index.html').write_text(compose(document, rows, assets), encoding='utf-8')
     return {
