@@ -20,7 +20,7 @@ git clone https://github.com/LeoTanFDU/paper-bilingual-web.git ~/.agents/skills/
 用 $paper-bilingual-web 把这些论文制作成中英对照网页。
 ```
 
-默认逐段忠实翻译，保留原始公式、原图原表和段落布局；图表配中文图注与解释；省略参考文献，保留附录。正文左右等宽，共享页面滚动，不添加额外控件。
+默认逐段忠实翻译，保留原始公式、原图原表和段落布局；图表配中文图注与解释；省略参考文献，保留附录。正文左右等宽，共享页面滚动。左侧以短横线刻度对应论文大标题，支持点击跳转、悬停显示章节名、滚动高亮当前章节和键盘操作；除章节刻度外不添加其他控件。
 
 辅助脚本依赖 Python 3、`pdfplumber` 和 `Pillow`。数据格式和脚本用法见 [references/blocks.md](references/blocks.md)，完整工作流程见 [SKILL.md](SKILL.md)。输出为可离线打开的静态网页，也可使用当前环境的静态站点工具发布。
 
@@ -28,4 +28,5 @@ git clone https://github.com/LeoTanFDU/paper-bilingual-web.git ~/.agents/skills/
 
 ## 版本
 
-- `v1.0.0`：原始双栏版本。
+- [v1.0.0](https://github.com/LeoTanFDU/paper-bilingual-web/tree/v1.0.0)：原始双栏版本。
+- [v1.1.0](https://github.com/LeoTanFDU/paper-bilingual-web/tree/v1.1.0)：增加左侧章节刻度导航。

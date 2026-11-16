@@ -152,14 +152,27 @@ def compose(document, rows, assets):
     title = document['title_en']
     name = document.get('short_title') or title
     source_lang = escape(document.get('source_lang', 'en'), quote=True)
+    chapters = [row for row in rows if row['kind'] == 'heading' and row.get('level', 2) == 2]
     parts = [
         '<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">',
         '<meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" href="data:,">',
         '<meta name="description" content="论文原文与中文译文逐段对照，保留原始公式和图表。">',
         '<title>' + escape(name) + ' — 原文与中文对照</title>',
-        '<link rel="stylesheet" href="reader.css"></head><body>',
-        '<main aria-label="论文原文与中文逐段对照">',
+        '<link rel="stylesheet" href="reader.css">',
     ]
+    if chapters:
+        parts.append('<script src="reader.js" defer></script>')
+    parts.append('</head><body' + (' class="has-section-rail"' if chapters else '') + '>')
+    if chapters:
+        parts.append('<nav class="section-rail" aria-label="论文章节导航">')
+        for row in chapters:
+            parser = FragmentCheck()
+            parser.feed(row['zh'])
+            label = escape(re.sub(r'\s+', ' ', ''.join(parser.words)).strip(), quote=True)
+            parts.append(f'<a href="#{row["id"]}" aria-label="{label}" title="{label}">'
+                         '<span class="section-rail__mark" aria-hidden="true"></span></a>')
+        parts.append('</nav>')
+    parts.append('<main aria-label="论文原文与中文逐段对照">')
     for index, row in enumerate(rows):
         kind = row['kind']
         level = row.get('level', 2)
@@ -206,7 +219,8 @@ def build(pdf_path, blocks_path, output, scale=4):
         rows = validate(document, pdf)
         (output / 'assets').mkdir(parents=True, exist_ok=True)
         assets = render_sources(pdf, rows, output, scale)
-    shutil.copyfile(SKILL_DIR / 'assets/reader.css', output / 'reader.css')
+    for name in ('reader.css', 'reader.js'):
+        shutil.copyfile(SKILL_DIR / 'assets' / name, output / name)
     (output / 'index.html').write_text(compose(document, rows, assets), encoding='utf-8')
     return {
         'output': str(output / 'index.html'), 'blocks': len(rows),
@@ -214,6 +228,7 @@ def build(pdf_path, blocks_path, output, scale=4):
         'figures': sum(row['kind'] == 'figure' for row in rows),
         'tables': sum(row['kind'] == 'table' for row in rows),
         'equations': sum(row['kind'] == 'equation' for row in rows),
+        'sections': sum(row['kind'] == 'heading' and row.get('level', 2) == 2 for row in rows),
         'source_pages': sorted({r[0] for row in rows for r in row.get('source', [])}),
     }
 
