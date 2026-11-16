@@ -159,9 +159,8 @@ def compose(document, rows, assets):
         '<meta name="description" content="论文原文与中文译文逐段对照，保留原始公式和图表。">',
         '<title>' + escape(name) + ' — 原文与中文对照</title>',
         '<link rel="stylesheet" href="reader.css">',
+        '<script src="reader.js" defer></script>',
     ]
-    if chapters:
-        parts.append('<script src="reader.js" defer></script>')
     parts.append('</head><body' + (' class="has-section-rail"' if chapters else '') + '>')
     if chapters:
         parts.append('<nav class="section-rail" aria-label="论文章节导航">')
