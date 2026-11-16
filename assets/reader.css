@@ -1,0 +1,54 @@
+:root{color-scheme:light;--ink:#252622;--muted:#81837c;--rule:#e6e7e1;--paper:#fff;--serif:"Songti SC","STSong","Noto Serif CJK SC","Source Han Serif SC",SimSun,serif}
+*{box-sizing:border-box}
+html{background:#f5f5f1;scrollbar-gutter:stable}
+body{margin:0;color:var(--ink);font-family:var(--serif);-webkit-font-smoothing:antialiased}
+main{position:relative;width:min(100%,1540px);min-width:760px;margin:0 auto;background:var(--paper);padding:48px 0 88px}
+main::before{content:"";position:absolute;top:48px;bottom:88px;left:50%;width:1px;background:var(--rule)}
+.pair{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);position:relative;break-inside:avoid}
+.cell{min-width:0;padding:0 42px 24px}
+.original .inner,.translation .inner{width:100%;max-width:590px;margin:0 auto}
+.original img{display:block;width:100%;height:auto;color:var(--muted)}
+.source-fragment+.source-fragment{margin-top:9px}
+.translation{font-size:19px;line-height:1.9;letter-spacing:.025em;overflow-wrap:break-word;line-break:strict}
+.translation p{margin:0;text-align:justify}
+.translation p+p{margin-top:1em}
+.paragraph .translation .inner,.abstract .translation .inner{text-indent:2em}
+.translation sup,.translation sub{font-size:.68em;line-height:0}
+.translation var{font-family:"Times New Roman",serif;font-style:italic;letter-spacing:0}
+.title .cell{padding-bottom:28px}
+h1{margin:0;font-family:var(--serif);font-size:29px;line-height:1.48;font-weight:600;letter-spacing:.02em;text-align:left;text-wrap:pretty}
+h1[lang="en"]{font-family:Georgia,"Times New Roman",serif;font-size:29px;line-height:1.28;font-weight:700;letter-spacing:-.025em}
+.authors .cell{padding-bottom:12px}
+.authors .translation{font-family:var(--serif);font-size:15px;line-height:1.85;letter-spacing:0}
+.authors .translation p{text-align:left}
+.authors .translation p+p{margin-top:.65em}
+.emails{font-family:"SFMono-Regular",Consolas,monospace;font-size:11px;line-height:1.7;overflow-wrap:anywhere}
+.footnote .cell{padding-bottom:20px}
+.footnote .original .inner{max-width:590px}
+.footnote .translation{font-size:14px;line-height:1.65;color:#555750}
+.heading .cell{padding-top:20px;padding-bottom:17px}
+.heading[data-level="2"] .cell{padding-top:33px}
+h2,h3{margin:0;font-family:var(--serif);font-weight:700;line-height:1.5;letter-spacing:.025em}
+h2{font-size:25px}h3{font-size:22px}
+.heading .original img{width:100%}
+.abstract .translation{font-size:18px;line-height:1.95}
+.bullet .translation .inner{position:relative;padding-left:1.2em}
+.bullet .translation .inner::before{content:"•";position:absolute;left:0;top:0}
+.equation .cell{padding-top:0;padding-bottom:23px}
+.equation .translation .inner{width:100%;font-size:0}
+.equation img{display:block;width:100%;height:auto}
+.step .translation{font-weight:700}
+.step .cell{padding-bottom:16px}
+.step-label{font-weight:700;text-indent:0}
+.figure .cell,.table .cell{padding-top:16px;padding-bottom:36px}
+.figure .original .inner,.table .original .inner{max-width:none}
+.figure .translation,.table .translation{font-size:17px;line-height:1.85}
+.caption{text-indent:0}
+.caption b{font-weight:700}
+.explanation{margin-top:22px;padding-top:17px;border-top:1px solid var(--rule);color:#5c6057}
+.explanation>p:first-child{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;font-size:11px;font-weight:500;letter-spacing:.16em;color:#8b8e84;margin-bottom:8px}
+.explanation p+p{margin-top:.8em}
+.continuation .translation .inner{text-indent:0}
+@media(min-width:1650px){.cell{padding-left:54px;padding-right:54px}}
+@media(max-width:1000px){main{padding-top:30px}main::before{top:30px}.cell{padding-left:26px;padding-right:26px}.translation{font-size:17px}.abstract .translation{font-size:16px}h1,h1[lang="en"]{font-size:24px}h2{font-size:22px}h3{font-size:20px}.figure .translation,.table .translation{font-size:15px}}
+@media print{html{background:white}main{width:100%;min-width:0;margin:0;padding-top:0}main::before{top:0;bottom:0}.cell{padding-left:15px;padding-right:15px;padding-bottom:15px}.translation{font-size:11pt}.figure .translation,.table .translation{font-size:10pt}h1,h1[lang="en"]{font-size:17pt}}
